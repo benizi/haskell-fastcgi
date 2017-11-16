@@ -7,11 +7,10 @@ import Data.Binary.Get
   , getWord32be
   , getWord8
   , getByteString
-  , lookAhead
   , skip
   )
 import Data.Binary.Put (putWord16be, putWord32be, putWord8, putByteString)
-import Data.Bits ((.&.), shiftL, shiftR)
+import Data.Bits ((.&.), shiftR)
 import qualified Data.ByteString as B
 import Data.ByteString.Lazy (toStrict)
 import Data.Default (Default(..), def)
@@ -170,14 +169,14 @@ instance Binary Header where
   get = do
     v <- getWord8
     t <- get
-    id <- getWord16be
+    rid <- getWord16be
     len <- getWord16be
     pad <- getWord8
     res <- getWord8
     return $ Header
       { hVersion = v
       , hType = t
-      , hRequestId = id
+      , hRequestId = rid
       , hContentLength = len
       , hPaddingLength = pad
       , hReserved = res
